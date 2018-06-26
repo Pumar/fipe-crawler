@@ -25,6 +25,8 @@ path = os.path.dirname(os.path.abspath(__file__))
 config = configparser.ConfigParser()
 config.read('config.ini')
 MainDivName = config['DivVehicleDesc']['MainDivName']
+filename = config['VehicleType']['filename']
+vehicle = config['VehicleType']['vehicle']
 
 class PageValues:
     def __init__(self, marca, modelo, ano_modelo, preco):
@@ -46,7 +48,7 @@ class PageValues:
         }
         # __csv_fields make save_data() method writes correctly in csv file.
         self.__csv_fields = self.__values.keys()
-        self.__csv_file_name = 'fipe.csv'
+        self.__csv_file_name = filename
 
     @property
     def marca(self):
@@ -127,8 +129,8 @@ class PageValues:
 
 class Element:
     def __init__(self, div, select):
-        self.div = div  # browser.find_element_by_id('selectTabelaReferenciacarro_chosen')
-        self.element = select  # browser.find_element_by_id('selectTabelaReferenciacarro')
+        self.div = div  # browser.find_element_by_id('selectTabelaReferencia'+vehicle+'_chosen')
+        self.element = select  # browser.find_element_by_id('selectTabelaReferencia'+vehicle)
         self.select = Select(self.element)
         self.options = [x for x in self.element.find_elements_by_tag_name('option')]
         self.texts = [r.get_attribute('innerHTML').replace('&amp;', '&') for r in self.options]
@@ -436,9 +438,9 @@ class App:
 
     def save_search(self):
         self.logger.info('salvando busca')
-        self.browser.find_element_by_id('buttonPesquisarcarro').click()
+        self.browser.find_element_by_id('buttonPesquisar'+vehicle).click()
         self.logger.info('botão pesquisarclicado')
-        result = self.browser.find_element_by_id('resultadoConsultacarroFiltros')
+        result = self.browser.find_element_by_id('resultadoConsulta'+vehicle+'Filtros')
         self.logger.info('pegando valores dos campos')
         table = result.find_element_by_tag_name('table')
         info = table.find_elements_by_tag_name('td')
@@ -448,7 +450,7 @@ class App:
         self.ano.preco = info[15].text
         self.logger.info('atualizando valores no banco de dados')
         values.save_csv()
-        self.browser.find_element_by_id('buttonLimparPesquisarcarro').click()
+        self.browser.find_element_by_id('buttonLimparPesquisar'+vehicle).click()
         self.logger.info('botão limpar busca clicado')
         pause()
         self.logger.info('pausa terminada')
@@ -456,8 +458,8 @@ class App:
     def select_reference(self):
         self.logger.info('selecionando mês de referência')
         self.reference_element = Element(
-            self.browser.find_element_by_id('selectTabelaReferenciacarro_chosen'),
-            self.browser.find_element_by_id('selectTabelaReferenciacarro')
+            self.browser.find_element_by_id('selectTabelaReferencia'+vehicle+'_chosen'),
+            self.browser.find_element_by_id('selectTabelaReferencia'+vehicle)
         )
         self.logger.info('Elemento reference criado')
         self.database.save_reference(self.reference_element.texts)
@@ -477,8 +479,8 @@ class App:
     def select_marca(self):
         self.logger.info('selecionando marca')
         self.marca_element = DataElement(
-            self.browser.find_element_by_id('selectMarcacarro_chosen'),
-            self.browser.find_element_by_id('selectMarcacarro')
+            self.browser.find_element_by_id('selectMarca'+vehicle+'_chosen'),
+            self.browser.find_element_by_id('selectMarca'+vehicle)
         )
         self.logger.info('DataElement criado')
 
@@ -502,8 +504,8 @@ class App:
     def select_modelo(self):
         self.logger.info('selecionando modelo')
         self.modelo_element = DataElement(
-            self.browser.find_element_by_id('selectAnoModelocarro_chosen'),
-            self.browser.find_element_by_id('selectAnoModelocarro')
+            self.browser.find_element_by_id('selectAnoModelo'+vehicle+'_chosen'),
+            self.browser.find_element_by_id('selectAnoModelo'+vehicle)
         )
         self.logger.info('DataElement do modelo lido')
 
@@ -526,8 +528,8 @@ class App:
     def select_ano(self):
         self.logger.info('selecionando ano do modelo')
         self.ano_element = DataElement(
-            self.browser.find_element_by_id('selectAnocarro_chosen'),
-            self.browser.find_element_by_id('selectAnocarro')
+            self.browser.find_element_by_id('selectAno'+vehicle+'_chosen'),
+            self.browser.find_element_by_id('selectAno'+vehicle)
         )
         self.logger.info('DataElement do ano criado')
 
