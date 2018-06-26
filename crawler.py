@@ -1,6 +1,7 @@
 import csv
 import time
 import logging
+import configparser
 
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
@@ -18,6 +19,9 @@ UNVISITED = 1
 VISITED = 2
 ERROR = 3
 
+config = configparser.ConfigParser()
+config.read('config.ini')
+MainDivName = config['DivVehicleDesc']['MainDivName']
 
 class PageValues:
     def __init__(self, marca, modelo, ano_modelo, preco):
@@ -415,7 +419,7 @@ class App:
         self.logger.info('abrindo http://veiculos.fipe.org.br/')
         try:
             self.browser.get("http://veiculos.fipe.org.br/")
-            self.browser.find_element_by_link_text('Consulta de Carros e Utilitários Pequenos').click()
+            self.browser.find_element_by_link_text(MainDivName).click()
         except Exception as err:
             self.logger.error(err)
             self.restart_browser()
@@ -549,7 +553,7 @@ class App:
         self.logger.info('Não possui anos não visitados')
 
     def run(self):
-        self.browser.find_element_by_link_text('Consulta de Carros e Utilitários Pequenos').click()
+        self.browser.find_element_by_link_text(MainDivName).click()
         self.select_reference()
 
 
