@@ -2,6 +2,7 @@ import csv
 import time
 import logging
 import configparser
+import os
 
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
@@ -18,6 +19,8 @@ from time import sleep
 UNVISITED = 1
 VISITED = 2
 ERROR = 3
+
+path = os.path.dirname(os.path.abspath(__file__))
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -388,7 +391,7 @@ class App:
         self.options.add_argument('-headless')
         self.logger.info('iniciano browser')
         self.browser = webdriver.Firefox(
-            executable_path='C:/Users/Mobi2buy/PycharmProjects/fipe-crawler/firefox/geckodriver.exe',
+            executable_path=path+'firefox/geckodriver.exe',
             firefox_options=self.options
         )
         self.logger.info('abrindo http://veiculos.fipe.org.br/')
@@ -413,7 +416,7 @@ class App:
             pause()
         self.logger.info('reiniciano browser')
         self.browser = webdriver.Firefox(
-            executable_path='C:/Users/Mobi2buy/PycharmProjects/fipe-crawler/firefox/geckodriver.exe',
+            executable_path=path+'firefox/geckodriver.exe',
             firefox_options=self.options
         )
         self.logger.info('abrindo http://veiculos.fipe.org.br/')
@@ -556,7 +559,7 @@ class App:
         self.browser.find_element_by_link_text(MainDivName).click()
         self.select_reference()
 
-
+#Change to game crawler detection, might have to use randint
 def pause():
     sleep(1)
 
