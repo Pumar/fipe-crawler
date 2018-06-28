@@ -391,9 +391,9 @@ class App:
         self.logger.info('criando App()')
         self.options = Options()
         self.options.add_argument('-headless')
-        self.logger.info('iniciano browser')
+        self.logger.info('iniciando browser')
         self.browser = webdriver.Firefox(
-            executable_path=path+'firefox/geckodriver.exe',
+            executable_path=path+'/firefox/geckodriver',
             firefox_options=self.options
         )
         self.logger.info('abrindo http://veiculos.fipe.org.br/')
@@ -418,7 +418,7 @@ class App:
             pause()
         self.logger.info('reiniciano browser')
         self.browser = webdriver.Firefox(
-            executable_path=path+'firefox/geckodriver.exe',
+            executable_path=path+'/firefox/geckodriver',
             firefox_options=self.options
         )
         self.logger.info('abrindo http://veiculos.fipe.org.br/')

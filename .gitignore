@@ -1,2 +1,4 @@
-# ignore datasets
+# ignore datasets, log files and database
 *.csv
+*.log
+*.db
