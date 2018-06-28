@@ -20,7 +20,7 @@ UNVISITED = 1
 VISITED = 2
 ERROR = 3
 
-path = os.path.dirname(os.path.abspath(__file__))
+path = os.getcwd()
 
 config = configparser.ConfigParser()
 config.read('config.ini')
